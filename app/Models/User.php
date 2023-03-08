@@ -2,72 +2,77 @@
 
 namespace App\Models;
 
-class User{
-	public $id;
-	public $name;
-	public $email;
-	public $password;
+use Symfony\Component\Validator\Constraints\DateTime;
 
-	public function __construct($id, $name, $email, $password){
-		$this->id = $id;
-		$this->name = $name;
-		$this->email = $email;
-		$this->password = $password;
-		echo "Был создан объект с параметрами: $id, $name, $email, $password";
-	}
-	public function validate_id()
-	{
-		if (is_int($this->id)){
-			echo "validated id";
-			return true; 
-		}
-		return false;
-	}
+#[\AllowDynamicProperties]
+class User
+{
+    public $id;
+    public $name;
+    public $email;
+    public $password;
 
-	public function validate_name()
-	{
-		if (is_string($this->name))
-		{
-			echo "validated name";
-			return true; 
-		}
-		return false;
-	}
+    public function __construct($id, $name, $email, $password)
+    {
+        if ($this->validate($id, $name, $email, $password)) {
+            $this->id = $id;
+            $this->name = $name;
+            $this->email = $email;
+            $this->password = $password;
+            $this->creation_time = new DateTime();
+            echo "\nБыл создан объект с параметрами: $id, $name, $email, $password";
+        } else
+            echo "\nВведены неправильные данные!";
+    }
 
-	public function validate_email()
-	{
-		if (is_string($this->email))
-		{
-			echo "validated email";
-			return true; 
-		}
-		return false;
-	}
-	
-	public function validate_password()
-	{
-		if (is_string($this->password))
-		{
-			echo "validated password";
-			return true; 
-		}
-		return false;
-	}
- 
-	public function validate()
-	{        
-		if ($this->validate_id() AND $this->validate_name() AND $this->validate_email() AND $this->validate_password()){
-			echo "Validated data";
-			return true;
-		}
-		return false;
-	}
-	
-	public function getTime()
-    	{
-        	if ($this->validate()) {
-	            return date("m.d.Y H:i:s", time());
-        	}
-    	}
+    public function validate_id($id)
+    {
+        if (is_int($id)) {
+            echo "\nvalidated id";
+            return true;
+        }
+        return false;
+    }
+
+    public function validate_name($name)
+    {
+        if (is_string($name)) {
+            echo "\nvalidated name";
+            return true;
+        }
+        return false;
+    }
+
+    public function validate_email($email)
+    {
+        if (is_string($email)) {
+            echo "\nvalidated email";
+            return true;
+        }
+        return false;
+    }
+
+    public function validate_password($password)
+    {
+        if (is_string($password)) {
+            echo "\nvalidated password";
+            return true;
+        }
+        return false;
+    }
+
+    public function validate($id, $name, $email, $password)
+    {
+
+        if ($this->validate_id($id) and $this->validate_name($name) and $this->validate_email($email) and $this->validate_password($password)) {
+            echo "\nValidated data";
+            return true;
+        }
+        return false;
+    }
+
+    public function getTime()
+    {
+        return $this->creation_time;
+    }
 }
-
