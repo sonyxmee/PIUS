@@ -4,10 +4,7 @@ namespace App\Models;
 
 class Comment
 {
-    public $user;
-    public $message;
-
-    public function __construct($user, $message)
+    public function __construct(public User $user, public string $message)
     {
         $this->user = $user;
         $this->message = $message;
